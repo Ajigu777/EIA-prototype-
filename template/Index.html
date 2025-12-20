@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EIA Screening Tool – Prototype</title>
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+
+  <!-- Tailwind (UI only) -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- Leaflet Draw -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="h-screen flex overflow-hidden bg-slate-100">
+
+  <!-- SIDEBAR -->
+  <aside class="w-[420px] bg-white border-r overflow-y-auto p-6 space-y-6">
+
+    <!-- Header -->
+    <div>
+      <h1 class="text-xl font-bold">EIA Screening Tool</h1>
+      <p class="text-xs text-slate-500">Prototype • Non‑Regulatory</p>
+    </div>
+
+    <!-- Screening Status -->
+    <div id="screeningStatus" class="rounded-lg border bg-yellow-50 border-yellow-200 p-4">
+      <p class="text-xs font-bold uppercase text-yellow-700">Screening Result</p>
+      <h3 id="statusText" class="text-lg font-bold text-yellow-800">Awaiting Location</h3>
+    </div>
+
+    <!-- Project Information -->
+    <div class="space-y-3">
+      <h3 class="text-xs font-bold uppercase text-slate-500">Project Information</h3>
+
+      <input id="projectId" class="form-input w-full" placeholder="Project ID (e.g. EIA‑001)">
+
+      <input id="locationInput" class="form-input w-full" placeholder="Search location name">
+      <button onclick="goToLocation()" class="w-full bg-blue-600 text-white py-2 rounded font-semibold">
+        Search Location
+      </button>
+
+      <div class="grid grid-cols-2 gap-2">
+        <input id="latitude" class="form-input" placeholder="Latitude">
+        <input id="longitude" class="form-input" placeholder="Longitude">
+      </div>
+
+      <button onclick="goToCoordinates()" class="w-full bg-slate-600 text-white py-2 rounded font-semibold">
+        Go to Coordinates
+      </button>
+    </div>
+
+    <!-- GeoJSON Upload -->
+    <div class="space-y-2">
+      <h3 class="text-xs font-bold uppercase text-slate-500">Spatial Data</h3>
+      <input id="geojsonInput" type="file" accept=".geojson" class="form-input w-full">
+      <p class="text-[10px] text-slate-400">Upload GeoJSON (Polygon / Line / Point)</p>
+    </div>
+
+    <!-- Impact Factors -->
+    <div class="space-y-4">
+      <h3 class="text-xs font-bold uppercase text-slate-500">Impact Factors (Auto)</h3>
+
+      <div>
+        <div class="flex justify-between text-sm"><span>Noise Impact</span><span id="noiseLabel">0%</span></div>
+        <input id="noiseRange" type="range" min="0" max="100" class="w-full" disabled>
+      </div>
+
+      <div>
+        <div class="flex justify-between text-sm"><span>Water Impact</span><span id="waterLabel">0%</span></div>
+        <input id="waterRange" type="range" min="0" max="100" class="w-full" disabled>
+      </div>
+
+      <div>
+        <div class="flex justify-between text-sm"><span>Biodiversity Impact</span><span id="bioLabel">0%</span></div>
+        <input id="bioRange" type="range" min="0" max="100" class="w-full" disabled>
+      </div>
+    </div>
+
+    <!-- Explanation -->
+    <details class="bg-slate-50 border rounded p-3 text-xs">
+      <summary class="cursor-pointer font-semibold">How are impacts calculated?</summary>
+      <p class="mt-2">
+        Impact values are generated using simplified backend rules based on location. 
+        This tool is for preliminary EIA screening only.
+      </p>
+    </details>
+
+    <!-- Disclaimer -->
+    <p class="text-[10px] text-red-600 text-center pt-4">
+      ⚠ This prototype supports preliminary EIA screening only and does not replace statutory assessments.
+    </p>
+
+  </aside>
+
+ <main class="flex-1 h-full relative">
+  <div id="map" class="h-full w-full"></div>
+</main>
+
+
+    <!-- Map Legend -->
+    <div class="absolute bottom-6 left-6 bg-white p-3 rounded shadow text-xs">
+      <p><span class="inline-block w-3 h-3 bg-green-500"></span> Low Impact</p>
+      <p><span class="inline-block w-3 h-3 bg-yellow-500"></span> Moderate Impact</p>
+      <p><span class="inline-block w-3 h-3 bg-red-500"></span> High Impact</p>
+    </div>
+  </main>
+
+  <!-- Custom JS -->
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+
+</body>
+</html>
+                                                    
